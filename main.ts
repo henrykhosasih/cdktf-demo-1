@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { App, TerraformStack } from "cdktf";
+import { App, TerraformOutput, TerraformStack } from "cdktf";
 import { file, provider } from "@cdktf/provider-local";
 import * as path from "path";
 
@@ -16,9 +16,13 @@ class MyStack extends TerraformStack {
     const projectName = "project-1";
     const basePath = `${projectDirectory}/${projectName}`;
 
-    new file.File(this, "readme-file", {
+    const readMeFile = new file.File(this, "readme-file", {
       filename: `${basePath}/README.md`,
       content: `# ${projectName}\n\nThis is the ${projectName} project`,
+    });
+
+    new TerraformOutput(this, "readMeContent", {
+      value: readMeFile.content,
     });
   }
 }
