@@ -1,5 +1,5 @@
 import { provider } from "@cdktf/provider-local";
-import { App, TerraformStack } from "cdktf";
+import { App, TerraformOutput, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import * as path from "path";
 import { ProjectFolder } from "./constructs/ProjectFolder";
@@ -16,9 +16,13 @@ class MyStack extends TerraformStack {
     );
     const projectName = "project-1";
 
-    new ProjectFolder(this, "project-folder", {
+    const projectFolder = new ProjectFolder(this, "project-folder", {
       projectName,
       projectDirectory,
+    });
+
+    new TerraformOutput(this, "readMeContent", {
+      value: projectFolder.readMeFile.content,
     });
   }
 }
